@@ -1,6 +1,6 @@
-import ratnum_division as rd
-import ratnum_power_division as rpd
-import ratnum_fracpower_division as rfpd
+import ratnum_div as rd
+import ratnum_power_div as rpd
+import ratnum_frac_power_div as rfpd
 
 def main():
     # program terminates if login is unsuccessful
@@ -28,7 +28,7 @@ def menu():
         rpd.division_power()
         return False
     elif option == "3":
-        # rfpd.division_frac_power()
+        rfpd.division_frac_power()
         return False
     elif option == "4":
         print("Thank you for using this project!")

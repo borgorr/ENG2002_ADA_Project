@@ -1,49 +1,46 @@
 import math
 
 class ratNum:
-    def __init__(self, a, b, n):
+    def __init__(self, a, b):
         self.a = a
         self.b = b
-        self.n = n
 
     # return string
     def __str__(self):
-        return f"({self.a}/{self.b}) ^ ({self.n})"
+        if self.a == 0:
+            return 0
+        if self.is_integer():
+            return f"{self.a}"
+        return f"({self.a}/{self.b})"
 
-    # apply an integer exponent to a fraction (a / b) ^ n
-    def remove_power_numer(self):
-        if self.n < 0:
-            self.a, self.b = self.b, self.a
-            self.n = -self.n
-        return ratNum(self.a ** self.n, self.b ** self.n, 1)
-    
     # simplify the fraction when there are common factors
     # remove negative sign in denominator
     def simplify(self):
         gcd = math.gcd(self.a, self.b)
         if self.b < 0:
             (self.a, self.b) = (-self.a, -self.b)
-        return ratNum(self.a // gcd, self.b // gcd, 1)
+        return ratNum(self.a // gcd, self.b // gcd)
     
 # invalid if fraction is 0 or base is 0
 def valid(numerator, denominator):
     if numerator == 0:
-        print("ERROR! Numerator must a non zero integer.")
+        print("ERROR! Numerator must a non-zero integer.")
         return False
     if denominator <= 0:
         print("ERROR! Denominator must be a positive integer.")
         return False
     return True
 
-def division_power():
+def division():
     # ask the user for the 1st and 2nd fraction
     for i in range(2):
-        print(f"Enter the numerator (a), denominator (b), power (n) of your {["1st", "2nd"][i]} number (a / b) ^ (n).")
-        print("a, b, n must be integers.")
-        print("Format: a, b, n")
-        # turn the 4 inputs into 4 integers
+        print(f"Enter the numerator (a), denominator (b) of your {["1st", "2nd"][i]} number (a / b)")
+        print("a, b must be integers.")
+        print("Format: a, b")
+
+        # turn the 2 inputs into 2 integers
         try:
-            numer, deno, power = map(int, input("Enter: ").split(","))
+            numer, deno = map(int, input("Enter: ").split(","))
             print()
         except ValueError:
             print()
@@ -56,17 +53,18 @@ def division_power():
             return False
         # store number details into frac1 in the first iteration
         if i == 0:
-            frac1 = ratNum(numer, deno, power)
+            frac1 = ratNum(numer, deno)
         # store number details into frac1 in the second iteration
         if i == 1:
-            frac2 = ratNum(numer, deno, power)
+            frac2 = ratNum(numer, deno)
 
-    # simplify the fraction by removing the power
-    sim_frac1 = frac1.remove_power_numer()
-    sim_frac2 = frac2.remove_power_numer()
+    if frac2.a == 0:
+        print("ERROR! Divisor must be non-zero.")
+        print("Returned to menu.")
+        return False
 
     # (n1 / d1) / (n2 / d2) = (n1 * d2) / (n2 * d1)
-    result = ratNum(sim_frac1.a * sim_frac2.b, sim_frac2.a * sim_frac1.b, 1).simplify()
+    result = ratNum(frac1.a * frac2.b, frac2.a * frac1.b).simplify()
 
     print(f"{frac1} / {frac2} = ({result.a}/{result.b})")
     input("Press Enter to return to menu...")

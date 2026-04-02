@@ -9,6 +9,12 @@ class ratNum:
 
     # return string
     def __str__(self):
+        if self.a == 0:
+            return 0
+        if self.is_integer():
+            return f"{self.a}"
+        if self.n_numer == 1:
+            return f"{({self.a}/{self.b})}"
         return f"({self.a}/{self.b}) ^ ({self.n_numer}/{self.n_deno})"
 
     def is_irrational(self):
@@ -39,18 +45,29 @@ class Surd:
         self.coeff = coeff
         self.index = index
         self.radicand = radicand
-    
+
     def __str__(self):
         if self.radicand == 1:
             return f"{self.coeff}"
         if self.index == 2:
             return f"{self.coeff}*√{self.radicand}"
         return f"{self.coeff}*{self.index}√{self.radicand}"
+    
+    def factor_surd(self):
+        new_coeff = self.coeff
+        new_radicand = self.radicand
+        # iterate from radicand - 1 to 2 to find the greatest root factor and factor it out
+        for i in range(self.radicand - 1, 1, -1):
+            if (self.radicand / (i ** self.index)).is_integer():
+                new_coeff = i
+                new_radicand = self.radicand // i ** self.index
+                break
+        return Surd(new_coeff, self.index, new_radicand)
 
 # invalid if fraction is 0 or base is 0
 def valid(numerator, denominator):
     if numerator == 0:
-        print("ERROR! Numerator must a non zero integer.")
+        print("ERROR! Numerator must a non-zero integer.")
         return False
     if denominator <= 0:
         print("ERROR! Denominator must be a positive integer.")
@@ -65,7 +82,7 @@ def division_frac_power():
         print("Format: a, b, c, d")
         # turn the 4 inputs into 4 integers
         try:
-            numer, deno, power_numer, power_deno = map(int, input("Enter: ").split(","))
+            numer, deno, expo_numer, expo_deno = map(int, input("Enter: ").split(","))
             print()
         except ValueError:
             print()
@@ -73,30 +90,45 @@ def division_frac_power():
             print("Returned to menu.")
             return False
         # return to menu if fraction is invalid
-        if not (valid(numer, deno) or valid(power_numer, power_deno)):
+        if not (valid(numer, deno) or valid(expo_numer, expo_deno)):
             print("Returned to menu.")
             return False
         # store number details into frac1 in the first iteration
         if i == 0:
-            frac1 = ratNum(numer, deno, power_numer, power_deno)
+            frac1 = ratNum(numer, deno, expo_numer, expo_deno)
         # store number details into frac1 in the second iteration
         if i == 1:
-            frac2 = ratNum(numer, deno, power_numer, power_deno)
+            frac2 = ratNum(numer, deno, expo_numer, expo_deno)
 
     # simplify the fraction by removing the power
-    sim_frac1 = frac1.remove_power_numer()
-    sim_frac2 = frac2.remove_power_numer()
+    new_frac1 = frac1.remove_power_numer()
+    new_frac2 = frac2.remove_power_numer()
 
-    # if the 
-    if sim_frac1.is_irrational() or sim_frac2.is_irrational():
-        frac1_a_surd = Surd()
-    sim_frac1 = sim_frac1.remove_power_deno()
-    sim_frac2 = sim_frac2.remove_power_deno()
+    # use Surd class object if the fraction is irrational
+    if new_frac1.is_irrational() or new_frac2.is_irrational():
+        new_frac1_a = Surd(1, frac1.n_deno, frac1.a).factor_surd()
+        new_frac1_b = Surd(1, frac1.n_deno, frac1.b).factor_surd()
+        new_frac2_a = Surd(1, frac2.n_deno, frac2.a).factor_surd()
+        new_frac2_b = Surd(1, frac2.n_deno, frac2.b).factor_surd()
 
-    print(f"{sim_frac1, sim_frac2 = }")
-    # (n1 / d1) / (n2 / d2) = (n1 * d2) / (n2 * d1)
-    result = ratNum(sim_frac1.a * sim_frac2.b, sim_frac2.a * sim_frac1.b, 1, 1).simplify()
+        new_frac1 = ratNum(new_frac1_a, new_frac1_b, 1, 1)
+        new_frac2 = ratNum(new_frac2_a, new_frac2_b, 1, 1)
 
-    print(f"{frac1} / {frac2} = ({result.a}/{result.b})")
+
+
+        # result = ratNum().simplify()
+
+
+        print(f"{new_frac1, new_frac2}")
+        
+    else:
+        sim_frac1 = sim_frac1.remove_power_deno()
+        sim_frac2 = sim_frac2.remove_power_deno()
+
+        print(f"{sim_frac1, sim_frac2 = }")
+        # (n1 / d1) / (n2 / d2) = (n1 * d2) / (n2 * d1)
+        result = ratNum(sim_frac1.a * sim_frac2.b, sim_frac2.a * sim_frac1.b, 1, 1).simplify()
+        
+        print(f"{frac1} / {frac2} = ({result.a}/{result.b})")
     input("Press Enter to return to menu...")
     print()
