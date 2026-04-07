@@ -7,9 +7,7 @@ class ratNum:
 
     # return string
     def __str__(self):
-        if self.a == 0:
-            return 0
-        if self.is_integer():
+        if self.a == 0 or self.b == 1:
             return f"{self.a}"
         return f"({self.a}/{self.b})"
 
@@ -31,11 +29,12 @@ def valid(numerator, denominator):
         return False
     return True
 
-def division():
+def frac_division():
     # ask the user for the 1st and 2nd fraction
     for i in range(2):
-        print(f"Enter the numerator (a), denominator (b) of your {["1st", "2nd"][i]} number (a / b)")
-        print("a, b must be integers.")
+        print(f"Enter the numerator (a), denominator (b) of your {["1st", "2nd"][i]} fraction (a / b)")
+        print("a must be an integer.")
+        print("b must be a non-zeroo integer.")
         print("Format: a, b")
 
         # turn the 2 inputs into 2 integers
@@ -45,11 +44,13 @@ def division():
         except ValueError:
             print()
             print("ERROR! Incorrect format of number.")
-            print("Returned to menu.")
+            input("Press Enter to return to menu...")
+            print()
             return False
         # return to menu if fraction is invalid
         if not valid(numer, deno):
-            print("Returned to menu.")
+            input("Press Enter to return to menu...")
+            print()
             return False
         # store number details into frac1 in the first iteration
         if i == 0:
@@ -60,7 +61,8 @@ def division():
 
     if frac2.a == 0:
         print("ERROR! Divisor must be non-zero.")
-        print("Returned to menu.")
+        input("Press Enter to return to menu...")
+        print()
         return False
 
     # (n1 / d1) / (n2 / d2) = (n1 * d2) / (n2 * d1)

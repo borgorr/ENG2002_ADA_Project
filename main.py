@@ -1,5 +1,5 @@
 import ratnum_div as rd
-import ratnum_power_div as rpd
+import ratnum_int_power_div as rpd
 import ratnum_frac_power_div as rfpd
 
 def main():
@@ -22,13 +22,13 @@ def menu():
     print()
 
     if option == "1":
-        rd.division()
+        rd.frac_division()
         return False
     elif option == "2":
-        rpd.division_power()
+        rpd.int_power_division()
         return False
     elif option == "3":
-        rfpd.division_frac_power()
+        rfpd.frac_power_division()
         return False
     elif option == "4":
         print("Thank you for using this project!")

@@ -8,9 +8,7 @@ class ratNum:
 
     # return string
     def __str__(self):
-        if self.a == 0:
-            return 0
-        if self.is_integer():
+        if self.a == 0 or self.b == 1:
             return f"{self.a}"
         if self.n == 1:
             return f"{({self.a}/{self.b})}"
@@ -29,7 +27,7 @@ class ratNum:
         gcd = math.gcd(self.a, self.b)
         if self.b < 0:
             (self.a, self.b) = (-self.a, -self.b)
-        return ratNum(self.a // gcd, self.b // gcd, 1)
+        return ratNum(self.a // gcd, self.b // gcd, self.n)
     
 # invalid if fraction is 0 or base is 0
 def valid(numerator, denominator):
@@ -41,11 +39,12 @@ def valid(numerator, denominator):
         return False
     return True
 
-def division_power():
+def int_power_division():
     # ask the user for the 1st and 2nd fraction
     for i in range(2):
-        print(f"Enter the numerator (a), denominator (b), exponent (n) of your {["1st", "2nd"][i]} number (a / b) ^ (n).")
-        print("a, b, n must be integers.")
+        print(f"Enter the numerator (a), denominator (b), exponent (n) of your {["1st", "2nd"][i]} fraction (a / b) ^ (n).")
+        print("a, b must be non-zero integers.")
+        print("n must be an integer.")
         print("Format: a, b, n")
         # turn the 4 inputs into 4 integers
         try:
@@ -54,11 +53,13 @@ def division_power():
         except ValueError:
             print()
             print("ERROR! Incorrect format of number.")
-            print("Returned to menu.")
+            input("Press Enter to return to menu...")
+            print()
             return False
         # return to menu if fraction is invalid
         if not valid(numer, deno):
-            print("Returned to menu.")
+            input("Press Enter to return to menu...")
+            print()
             return False
         # store number details into frac1 in the first iteration
         if i == 0:
