@@ -7,8 +7,6 @@ class ratNum:
 
     # return string
     def __str__(self):
-        if self.a == 0 or self.b == 1:
-            return f"{self.a}"
         return f"({self.a}/{self.b})"
 
     # simplify the fraction when there are common factors
