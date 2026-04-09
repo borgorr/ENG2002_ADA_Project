@@ -13,11 +13,14 @@ class ratNum:
         return f"({self.a}/{self.b}) ^ ({self.n})"
 
     # apply an integer exponent to a fraction (a / b) ^ n
-    def remove_power_numer(self):
+    def remove_expo(self):
         if self.n < 0:
             self.a, self.b = self.b, self.a
             self.n = -self.n
-        return ratNum(self.a ** self.n, self.b ** self.n, 1)
+        self.a **= self.n
+        self.b **= self.n
+        self.n = 1
+        return ratNum(self.a, self.b, self.n)
     
     # simplify the fraction when there are common factors
     # remove negative sign in denominator
@@ -25,7 +28,9 @@ class ratNum:
         gcd = math.gcd(self.a, self.b)
         if self.b < 0:
             (self.a, self.b) = (-self.a, -self.b)
-        return ratNum(self.a // gcd, self.b // gcd, self.n)
+        self.a //= gcd
+        self.b //= gcd
+        return ratNum(self.a, self.b, self.n)
     
 # invalid if fraction is 0 or base is 0
 def valid(numerator, denominator):
@@ -66,9 +71,9 @@ def int_power_division():
         if i == 1:
             frac2 = ratNum(numer, deno, expo)
 
-    # simplify the fraction by removing the power
-    sim_frac1 = frac1.remove_power_numer()
-    sim_frac2 = frac2.remove_power_numer()
+    # simplify the fraction by removing the exponent
+    sim_frac1 = frac1.remove_expo()
+    sim_frac2 = frac2.remove_expo()
 
     # (n1 / d1) / (n2 / d2) = (n1 * d2) / (n2 * d1)
     result = ratNum(sim_frac1.a * sim_frac2.b, sim_frac2.a * sim_frac1.b, 1).simplify()

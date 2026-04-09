@@ -9,14 +9,11 @@ class ratNum:
 
     # return string
     def __str__(self):
-        return f"[({self.a}/{self.b}) ^ ({self.n_numer})]"
+        return f"[({self.a}/{self.b}) ^ ({self.n_numer}/{self.n_deno})]"
     
     def is_complex(self):
         return (self.a < 0 or self.b < 0) and self.n_deno % 2 == 0
 
-    def is_irrational(self):
-        return not ((self.a ** (1 / self.n_deno) % 1).is_integer() and (self.b ** (1 / self.n_deno) % 1).is_integer())
-    
     # apply an integer exponent to a fraction (a / b) ^ n
     def remove_power_numer(self):
         if self.n_deno < 0:
@@ -125,8 +122,6 @@ def frac_power_division():
     # simplify the fraction by removing the power
     new_frac1 = frac1.remove_power_numer()
     new_frac2 = frac2.remove_power_numer()
-    new_frac1 = frac1.remove_power_numer()
-    new_frac2 = frac2.remove_power_numer()
 
     # return to menu if complex number is involved
     if new_frac1.is_complex() or new_frac2.is_complex():
@@ -135,26 +130,31 @@ def frac_power_division():
         print()
         return False
 
-    new_frac1_a = Surd(1, frac1.n_deno, frac1.a).factor_surd()
-    new_frac1_b = Surd(1, frac1.n_deno, frac1.b).factor_surd()
-    new_frac2_a = Surd(1, frac2.n_deno, frac2.a).factor_surd()
-    new_frac2_b = Surd(1, frac2.n_deno, frac2.b).factor_surd()
+    new_frac1 = ratNum(Surd(1, frac1.n_deno, frac1.a).factor_surd(), Surd(1, frac1.n_deno, frac1.b).factor_surd(), 1, 1)
+    new_frac2 = ratNum(Surd(1, frac2.n_deno, frac2.a).factor_surd(), Surd(1, frac2.n_deno, frac2.b).factor_surd(), 1, 1)
 
-    # return to menu if surd cannot be simplified in the fraction
-    if new_frac1_a.surd_part() not in [new_frac1_b.surd_part(), new_frac2_b.surd_part()] or new_frac2_a.surd_part() not in [new_frac1_b.surd_part(), new_frac2_b.surd_part()]:
-        # return to menu if surd cannot be rationalised
-        if new_frac1_a.surd_part() != new_frac2_a.surd_part() or new_frac1_b.surd_part() != new_frac2_b.surd_part():
-            print("ERROR! Surds in the fractions cannot be rationalised.")
-            input("Press Enter to return to menu...")
-            print()
-            return False
-        print("ERROR! Surds cannot be simplified in the fraction.")
+    # if surd can be simplified in the fraction
+    if new_frac1.a.surd_part() == new_frac1.b.surd_part():
+        new_frac1.a = new_frac1.a.coeff
+        new_frac1.b = new_frac1.b.coeff
+    
+        
+    # rationalise square roots in numerator part if numerator surds can be rationalised
+    if new_frac1.a.index == 2 and new_frac2.b.index == 2 and new_frac1.a.radicand == new_frac2.b.radicand:
+        new_numerator = new_frac1.a.coeff * new_frac2.b.coeff * new_frac1.a.radicand
+    # rationalise square roots in denominator part if denominator surds can be rationalised
+    if new_frac2.a.index == 2 and new_frac1.b.index == 2 and new_frac2.a.radicand == new_frac1.b.radicand:
+        new_denominator = new_frac2.a.coeff * new_frac1.b.coeff * new_frac2.a.radicand
+    if new_frac1.a.surd_part() == new_frac2.a.surd_part():
+        
+        print("ERROR! Surds in the fractions cannot be rationalised.")
         input("Press Enter to return to menu...")
         print()
         return False
     
-    result = ratNum(new_frac1_a.coeff * new_frac2_b.coeff * new_frac1_a.radicand, new_frac1_b.coeff * new_frac2_a.coeff * new_frac1_b.radicand, 1, 1).simplify()
 
-    print(f"{frac1} / {frac2} = ({result.a}/{result.b})")
-    input("Press Enter to return to menu...")
-    print()
+        result = ratNum(new_frac1.a.coeff * new_frac2.b.coeff, new_frac2.a.coeff * new_frac1.b.coeff , 1, 1).simplify()
+        print(f"{frac1} / {frac2} = ({result.a}/{result.b})")
+        input("Press Enter to return to menu...")
+        print()
+        return False
