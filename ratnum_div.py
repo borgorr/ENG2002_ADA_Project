@@ -41,12 +41,12 @@ def frac_division():
         except ValueError:
             print()
             print("ERROR! Incorrect format of number.")
-            input("Press Enter to return to menu...")
+            input("Press Enter to return to main menu...")
             print()
             return False
         # return to menu if fraction is invalid
         if not valid(deno):
-            input("Press Enter to return to menu...")
+            input("Press Enter to return to main menu...")
             print()
             return False
         # store number details into frac1 in the first iteration
@@ -58,7 +58,7 @@ def frac_division():
 
     if frac2.a == 0:
         print("ERROR! Divisor (the 2nd fraction) must be non-zero.")
-        input("Press Enter to return to menu...")
+        input("Press Enter to return to main menu...")
         print()
         return False
 
@@ -66,5 +66,5 @@ def frac_division():
     result = ratNum(frac1.a * frac2.b, frac2.a * frac1.b).simplify()
 
     print(f"{frac1} / {frac2} = ({result.a}/{result.b})")
-    input("Press Enter to return to menu...")
+    input("Press Enter to return to main menu...")
     print()

@@ -38,6 +38,7 @@ def menu():
         return True
     else:
         print("Invalid input. Try again!")
+        input("Press Enter to return to main menu...")
     return False
 
 def login():

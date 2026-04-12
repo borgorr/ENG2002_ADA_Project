@@ -56,12 +56,12 @@ def int_power_division():
         except ValueError:
             print()
             print("ERROR! Incorrect format of number.")
-            input("Press Enter to return to menu...")
+            input("Press Enter to return to main menu...")
             print()
             return False
         # return to menu if fraction is invalid
         if not valid(numer, deno):
-            input("Press Enter to return to menu...")
+            input("Press Enter to return to main menu...")
             print()
             return False
         # store number details into frac1 in the first iteration
@@ -79,5 +79,5 @@ def int_power_division():
     result = ratNum(sim_frac1.a * sim_frac2.b, sim_frac2.a * sim_frac1.b, 1).simplify()
 
     print(f"{frac1} / {frac2} = ({result.a}/{result.b})")
-    input("Press Enter to return to menu...")
+    input("Press Enter to return to main menu...")
     print()

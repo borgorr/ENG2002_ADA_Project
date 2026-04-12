@@ -98,12 +98,12 @@ def frac_power_division():
         except ValueError:
             print()
             print("ERROR! Incorrect format of number.")
-            input("Press Enter to return to menu...")
+            input("Press Enter to return to main menu...")
             print()
             return False
         # return to menu if fraction is invalid
         if not (valid(numer, deno) or valid(expo_numer, expo_deno)):
-            input("Press Enter to return to menu...")
+            input("Press Enter to return to main menu...")
             print()
             return False
         # store number details into frac1 in the first iteration
@@ -120,7 +120,7 @@ def frac_power_division():
     # end the function if the result contains negative number of even roots larger than 2
     if new_frac1.even_root_neg_rad() or new_frac2.even_root_neg_rad():
         print("ERROR! Result contains even order of root larger than 2 with negative radicand.")
-        input("Press Enter to return to menu...")
+        input("Press Enter to return to main menu...")
         print()
         return False
     # simplify the fraction by removing the exponent
@@ -160,18 +160,18 @@ def frac_power_division():
     
     if new_frac1.a.complex or new_frac1.b.complex or new_frac2.a.complex or new_frac2.b.complex:
         print("ERROR! Result contains imaginary number.")
-        input("Press Enter to return to menu...")
+        input("Press Enter to return to main menu...")
         print()
         return False
     
     if not (new_frac1.a.radicand == new_frac1.b.radicand == new_frac2.a.radicand == new_frac2.b.radicand == 1):
         print("ERROR! Result contains irrational number.")
-        input("Press Enter to return to menu...")
+        input("Press Enter to return to main menu...")
         print()
         return False
 
     result = ratNum(new_frac1.a.coeff * new_frac2.b.coeff, new_frac2.a.coeff * new_frac1.b.coeff , 1, 1).simplify()
     print(f"{frac1} / {frac2} = ({result.a}/{result.b})")
-    input("Press Enter to return to menu...")
+    input("Press Enter to return to main menu...")
     print()
     return False
