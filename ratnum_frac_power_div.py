@@ -14,12 +14,8 @@ class ratNum:
     def even_root_neg_rad(self):
         return (self.a / self.b) < 0 and self.n_deno != 2 and self.n_deno % 2 == 0
     
-
     # apply an integer exponent to a fraction (a / b) ^ n
     def remove_expo_numer(self):
-        if self.n_deno < 0:
-            self.n_numer = -self.n_numer
-            self.n_deno = -self.n_deno
         if self.n_numer < 0:
             self.a, self.b = self.b, self.a
             self.n_numer = -self.n_numer
@@ -28,12 +24,6 @@ class ratNum:
         self.n_numer = 1
         return ratNum(self.a, self.b, self.n_numer, self.n_deno)
     
-    def remove_expo_deno(self):
-        self.a **= 1 / self.n_deno
-        self.b **= 1 / self.n_deno
-        self.n_deno = 1
-        return ratNum(self.a, self.b, self.n_numer, self.n_deno)
-
     # simplify the fraction when there are common factors
     # remove negative sign in denominator
     def simplify(self):
@@ -75,7 +65,7 @@ class Surd:
         # consider root index (n), radicand (a) n√(a)
         # maximum possible root factor must be smaller than or equal to n√(a) rounded up
         max_root_factor = math.ceil(self.radicand ** (1 / self.index))
-        for i in range(factor, max_root_factor):
+        for i in range(factor, max_root_factor + 1):
             if self.radicand % i ** self.index == 0:
                 self.coeff *= i
                 self.radicand //= i ** self.index
@@ -122,21 +112,30 @@ def frac_power_division():
         # store number details into frac1 in the second iteration
         if i == 1:
             frac2 = ratNum(numer, deno, expo_numer, expo_deno)
-    
+
+    # simplify the exponent fraction
+    frac1_expo, frac2_expo = ratNum(frac1.n_numer, frac1.n_deno, 1, 1).simplify(), ratNum(frac2.n_numer, frac2.n_deno, 1, 1).simplify()
+    new_frac1, new_frac2 = ratNum(frac1.a, frac1.b, frac1_expo.a, frac1_expo.b), ratNum(frac2.a, frac2.b, frac2_expo.a, frac2_expo.b)
+
     # end the function if the result contains negative number of even roots larger than 2
-    if frac1.even_root_neg_rad() or frac2.even_root_neg_rad():
+    if new_frac1.even_root_neg_rad() or new_frac2.even_root_neg_rad():
         print("ERROR! Result contains even order of root larger than 2 with negative radicand.")
         input("Press Enter to return to menu...")
         print()
         return False
-    
     # simplify the fraction by removing the exponent
-    new_frac1 = frac1.remove_expo_numer()
-    new_frac2 = frac2.remove_expo_numer()
+    new_frac1 = new_frac1.remove_expo_numer()
+    new_frac2 = new_frac2.remove_expo_numer()
 
-    new_frac1 = ratNum(Surd(1, frac1.n_deno, frac1.a, False).simplify_surd().factor_surd(), Surd(1, frac1.n_deno, frac1.b, False).simplify_surd().factor_surd(), 1, 1)
-    new_frac2 = ratNum(Surd(1, frac2.n_deno, frac2.a, False).simplify_surd().factor_surd(), Surd(1, frac2.n_deno, frac2.b, False).simplify_surd().factor_surd(), 1, 1)
+    new_frac1 = ratNum(Surd(1, new_frac1.n_deno, new_frac1.a, False).simplify_surd().factor_surd(), Surd(1, new_frac1.n_deno, new_frac1.b, False).simplify_surd().factor_surd(), 1, 1)
+    new_frac2 = ratNum(Surd(1, new_frac2.n_deno, new_frac2.a, False).simplify_surd().factor_surd(), Surd(1, new_frac2.n_deno, new_frac2.b, False).simplify_surd().factor_surd(), 1, 1)
     
+    print(new_frac1.a)
+    print(new_frac1.b)
+    print(new_frac2.a)
+    print(new_frac2.b)
+
+
     for top, bottom in [[new_frac1.a, new_frac1.b],
                         [new_frac2.a, new_frac2.b],
                         [new_frac1.a, new_frac2.a],
@@ -165,7 +164,7 @@ def frac_power_division():
         print()
         return False
     
-    if new_frac1.a.radicand != 1 or new_frac1.b.radicand != 1 or new_frac2.a.radicand != 1 or new_frac2.b.radicand != 1:
+    if not (new_frac1.a.radicand == new_frac1.b.radicand == new_frac2.a.radicand == new_frac2.b.radicand == 1):
         print("ERROR! Result contains irrational number.")
         input("Press Enter to return to menu...")
         print()
