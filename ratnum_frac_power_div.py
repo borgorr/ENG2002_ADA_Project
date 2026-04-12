@@ -11,8 +11,9 @@ class ratNum:
     def __str__(self):
         return f"[({self.a}/{self.b}) ^ ({self.n_numer}/{self.n_deno})]"
     
-    def is_complex(self):
-        return (self.a < 0 or self.b < 0) and self.n_deno % 2 == 0
+    def even_root_neg_rad(self):
+        return (self.a / self.b) < 0 and self.n_deno != 2 and self.n_deno % 2 == 0
+    
 
     # apply an integer exponent to a fraction (a / b) ^ n
     def remove_expo_numer(self):
@@ -50,37 +51,36 @@ class Surd:
         self.radicand = radicand
         self.complex = complex
 
-    def factor_surd(self):
+    def __str__(self):
+        # omit displaying root part if radicand is 1
+        if self.radicand == 1:
+            return f"{self.coeff}"
+        # omit displaying root index if root index is 2
+        if self.index == 2:
+            return f"{self.coeff}*√{self.radicand}"
+        # coeff * index √ radicand
+        return f"{self.coeff}*{self.index}√{self.radicand}"
+    
+    def simplify_surd(self):
         # put negative sign at coefficient if root index is odd
         if self.index % 2 == 1 and self.radicand < 0:
             self.coeff, self.radicand = -self.coeff, -self.radicand
-
-        # raise a complex flag if root index is 2 and radicand is 0
-        elif self.index == 2 and self.radicand < 0:
+        # raise a complex flag if root index is 2 and radicand is negative
+        if self.index == 2 and self.radicand < 0:
             self.complex = True
             self.radicand = -self.radicand
-        
-        elif self.index % 2 == 0 and self.radicand < 0:
-            print("ERROR! Result contains even order of root larger than 2 with negative radicand.")
-            input("Press Enter to return to menu...")
-            print()
-            return False
-        
+        return Surd(self.coeff, self.index, self.radicand, self.complex)
+    
+    def factor_surd(self, factor=2):
         # consider root index (n), radicand (a) n√(a)
         # maximum possible root factor must be smaller than or equal to n√(a) rounded up
         max_root_factor = math.ceil(self.radicand ** (1 / self.index))
-
-        # iterate from the maximum possible root factor to 1 to find the greatest root factor
-        # then factor the greatest root factor out of the surd
-        for i in range(max_root_factor, 0, -1):
-            if (self.radicand / (i ** self.index)).is_integer():
-                new_coeff = i
-                new_radicand = self.radicand // i ** self.index
-                break
-        self.coeff *= new_coeff
-        if self.radicand == 1:
-            self.index = 1
-        return Surd(self.coeff, self.index, new_radicand, self.complex)
+        for i in range(factor, max_root_factor):
+            if self.radicand % i ** self.index == 0:
+                self.coeff *= i
+                self.radicand //= i ** self.index
+                return Surd(self.coeff, self.index, self.radicand, self.complex).factor_surd(factor)
+        return Surd(self.coeff, self.index, self.radicand, self.complex)
 
     def surd_part(self):
         return self.index, self.radicand
@@ -123,53 +123,41 @@ def frac_power_division():
         if i == 1:
             frac2 = ratNum(numer, deno, expo_numer, expo_deno)
     
-    # result = 1 if value of the 1st and 2nd value are the same
-    if (frac1.a / frac1.b) ** (frac1.n_numer / frac1.n_deno) == (frac2.a / frac2.b) ** (frac2.n_numer / frac2.n_deno):
-        print(f"{frac1} / {frac2} = 1")
+    # end the function if the result contains negative number of even roots larger than 2
+    if frac1.even_root_neg_rad() or frac2.even_root_neg_rad():
+        print("ERROR! Result contains even order of root larger than 2 with negative radicand.")
         input("Press Enter to return to menu...")
         print()
         return False
-
+    
     # simplify the fraction by removing the exponent
     new_frac1 = frac1.remove_expo_numer()
     new_frac2 = frac2.remove_expo_numer()
 
-    new_frac1 = ratNum(Surd(1, frac1.n_deno, frac1.a, False).factor_surd(), Surd(1, frac1.n_deno, frac1.b, False).factor_surd(), 1, 1)
-    new_frac2 = ratNum(Surd(1, frac2.n_deno, frac2.a, False).factor_surd(), Surd(1, frac2.n_deno, frac2.b, False).factor_surd(), 1, 1)
+    new_frac1 = ratNum(Surd(1, frac1.n_deno, frac1.a, False).simplify_surd().factor_surd(), Surd(1, frac1.n_deno, frac1.b, False).simplify_surd().factor_surd(), 1, 1)
+    new_frac2 = ratNum(Surd(1, frac2.n_deno, frac2.a, False).simplify_surd().factor_surd(), Surd(1, frac2.n_deno, frac2.b, False).simplify_surd().factor_surd(), 1, 1)
     
-    # simplify surd part
-    if new_frac1.a.surd_part() == new_frac1.b.surd_part():
-        new_frac1.a.index, new_frac1.a.radicand, new_frac1.b.index, new_frac1.b.radicand = 1, 1, 1, 1
-    if new_frac2.a.surd_part() == new_frac2.b.surd_part():
-        new_frac2.a.index, new_frac2.a.radicand, new_frac2.b.index, new_frac2.b.radicand = 1, 1, 1, 1
-    if new_frac1.a.surd_part() == new_frac2.a.surd_part():
-        new_frac1.a.index, new_frac1.a.radicand, new_frac2.a.index, new_frac2.a.radicand = 1, 1, 1, 1
-    if new_frac1.b.surd_part() == new_frac2.b.surd_part():
-        new_frac1.b.index, new_frac1.b.radicand, new_frac2.b.index, new_frac2.b.radicand = 1, 1, 1, 1
+    for top, bottom in [[new_frac1.a, new_frac1.b],
+                        [new_frac2.a, new_frac2.b],
+                        [new_frac1.a, new_frac2.a],
+                        [new_frac1.b, new_frac2.b]]:
+        # simplify surd part
+        if top.surd_part() == bottom.surd_part():
+            top.index = top.radicand = bottom.index = bottom.radicand = 1
+        # simplify imaginary part
+        if top.complex and bottom.complex:
+            top.complex = bottom.complex = False
 
-    # simplify imaginary part
-    if new_frac1.a.complex and new_frac1.b.complex:
-        new_frac1.a.complex, new_frac1.b.complex = False, False
-    if new_frac2.a.complex and new_frac2.b.complex:
-        new_frac2.a.complex, new_frac2.b.complex = False, False
-    if new_frac1.a.complex and new_frac2.a.complex:
-        new_frac1.a.complex, new_frac2.a.complex = False, False
-    if new_frac1.b.complex and new_frac2.b.complex:
-        new_frac1.b.complex, new_frac2.b.complex = False, False
-
-    # rationalise square roots
-    if new_frac1.a.index == 2 and new_frac2.b.index == 2 and new_frac1.a.radicand == new_frac2.b.radicand:
-        new_frac1.a.coeff = new_frac1.a.radicand
-        new_frac1.a.radicand, new_frac2.b.radicand = 1, 1
-    if new_frac2.a.index == 2 and new_frac1.b.index == 2 and new_frac2.a.radicand == new_frac1.b.radicand:
-        new_frac2.a.coeff = new_frac2.a.radicand
-        new_frac2.a.radicand, new_frac1.b.radicand = 1, 1
-
-    # i * i = -1
-    if new_frac1.a.complex and new_frac2.b.complex:
-        new_frac1.a.coeff, new_frac1.a.complex, new_frac2.b.complex = -new_frac1.a.coeff, False, False
-    if new_frac2.a.complex and new_frac1.b.complex:
-        new_frac2.a.coeff, new_frac2.a.complex, new_frac1.b.complex = -new_frac2.a.coeff, False, False
+    for left, right in [[new_frac1.a, new_frac2.b],
+                        [new_frac1.b, new_frac2.a]]:
+        # rationalise square roots
+        if left.index == right.index == 2 and left.radicand == right.radicand:
+            left.coeff = left.radicand
+            left.radicand = right.radicand = 1
+        # i * i = -1
+        if left.complex and right.complex:
+            left.coeff = -left.coeff
+            left.complex = right.complex = False
     
     if new_frac1.a.complex or new_frac1.b.complex or new_frac2.a.complex or new_frac2.b.complex:
         print("ERROR! Result contains imaginary number.")
@@ -188,3 +176,5 @@ def frac_power_division():
     input("Press Enter to return to menu...")
     print()
     return False
+
+frac_power_division()
