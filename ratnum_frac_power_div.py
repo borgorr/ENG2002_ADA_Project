@@ -188,5 +188,3 @@ def frac_power_division():
     input("Press Enter to return to menu...")
     print()
     return False
-    
-frac_power_division()
