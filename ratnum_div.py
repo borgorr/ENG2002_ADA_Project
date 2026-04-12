@@ -9,13 +9,6 @@ class ratNum:
     def __str__(self):
         return f"({self.a}/{self.b})"
     
-    # invalid if fraction is 0 or base is 0
-    def valid(self):
-        if self.b == 0:
-            print("ERROR! Denominator must be a non-zero integer.")
-            return False
-        return True
-
     # simplify the fraction when there are common factors
     # remove negative sign in denominator
     def simplify(self):
@@ -25,6 +18,13 @@ class ratNum:
         self.a //= gcd
         self.b //= gcd
         return ratNum(self.a, self.b)
+    
+# invalid if fraction is 0 or base is 0
+def valid(deno):
+    if deno == 0:
+        print("ERROR! Denominator must be a non-zero integer.")
+        return False
+    return True
     
 def frac_division():
     # ask the user for the 1st and 2nd fraction
@@ -45,8 +45,7 @@ def frac_division():
             print()
             return False
         # return to menu if fraction is invalid
-        if deno == 0:
-            print("ERROR! Denominator must be a non-zero integer.")
+        if not valid(deno):
             input("Press Enter to return to menu...")
             print()
             return False

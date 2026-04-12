@@ -9,7 +9,7 @@ class ratNum:
     # return string
     def __str__(self):
         if self.n == 1:
-            return f"{({self.a}/{self.b})}"
+            return f"({self.a}/{self.b})"
         return f"({self.a}/{self.b}) ^ ({self.n})"
 
     # apply an integer exponent to a fraction (a / b) ^ n
