@@ -130,12 +130,6 @@ def frac_power_division():
     new_frac1 = ratNum(Surd(1, new_frac1.n_deno, new_frac1.a, False).simplify_surd().factor_surd(), Surd(1, new_frac1.n_deno, new_frac1.b, False).simplify_surd().factor_surd(), 1, 1)
     new_frac2 = ratNum(Surd(1, new_frac2.n_deno, new_frac2.a, False).simplify_surd().factor_surd(), Surd(1, new_frac2.n_deno, new_frac2.b, False).simplify_surd().factor_surd(), 1, 1)
     
-    print(new_frac1.a)
-    print(new_frac1.b)
-    print(new_frac2.a)
-    print(new_frac2.b)
-
-
     for top, bottom in [[new_frac1.a, new_frac1.b],
                         [new_frac2.a, new_frac2.b],
                         [new_frac1.a, new_frac2.a],
