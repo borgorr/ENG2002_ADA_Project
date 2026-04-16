@@ -16,7 +16,7 @@ class ratNum:
     def remove_expo(self):
         if self.n < 0:
             self.a, self.b = self.b, self.a
-            self.n = -self.n
+            self.n *= -1
         self.a **= self.n
         self.b **= self.n
         self.n = 1
@@ -26,8 +26,6 @@ class ratNum:
     # remove negative sign in denominator
     def simplify(self):
         gcd = math.gcd(self.a, self.b)
-        if self.b < 0:
-            (self.a, self.b) = (-self.a, -self.b)
         self.a //= gcd
         self.b //= gcd
         return ratNum(self.a, self.b, self.n)

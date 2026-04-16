@@ -13,8 +13,6 @@ class ratNum:
     # remove negative sign in denominator
     def simplify(self):
         gcd = math.gcd(self.a, self.b)
-        if self.b < 0:
-            (self.a, self.b) = (-self.a, -self.b)
         self.a //= gcd
         self.b //= gcd
         return ratNum(self.a, self.b)
