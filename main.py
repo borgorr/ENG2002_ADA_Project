@@ -1,12 +1,14 @@
 import os
 import ratnum_div as rd
 import ratnum_int_power_div as rpd
+import ratnum_frac_power as rfp
 import ratnum_frac_power_div as rfpd
 
 def main():
     os.system("cls")
     # program terminates if login is unsuccessful
-    login()
+    if login():
+        exit()
 
     exit_flag = False
     # looping until menu() returns True
@@ -18,8 +20,9 @@ def menu():
     print("*** Main Menu ***")
     print("1. Fraction division")
     print("2. Fraction to an integer power division")
-    print("3. Fraction to a fraction power division")
-    print("4. End Program")
+    print("3. Fraction to a fractional power")
+    print("4. Fraction to a fractional power division")
+    print("5. End Program")
     print("*" * 17)
     option = input("Enter your option (1-4): ")
     print()
@@ -31,9 +34,12 @@ def menu():
         rpd.int_power_division()
         return False
     elif option == "3":
-        rfpd.frac_power_division()
+        rfp.frac_power()
         return False
     elif option == "4":
+        rfpd.frac_power_division()
+        return False
+    elif option == "5":
         print("Thank you for using this project!")
         return True
     else:
@@ -67,7 +73,7 @@ def login():
         print()
         print("New user created. Login successful!")
         input("Press Enter to go to main menu...")
-        return
+        return False
 
     # check if password match the passwrod in the login dataset
     attempts = 3
@@ -77,13 +83,13 @@ def login():
         if users[check_user] == check_pass:
             print("Login successful!")
             input("Press Enter to proceed to main menu...")
-            return
+            return False
         # if it is not at the last attempt
         if attempts != 1:
             print("Wrong password! Please try again.")
         attempts -= 1
     print("Wrong password!")
     print("Program ended.")
-    exit()
+    return True
 
 main()
