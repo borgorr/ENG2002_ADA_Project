@@ -76,18 +76,18 @@ def login():
         return False
 
     # check if password match the passwrod in the login dataset
-    attempts = 0
-    while attempts < 3:
-        check_pass = input(f"Password ({3-attempts} attempt(s) left): ")
+    remaining_attempts = 3
+    while remaining_attempts > 0:
+        check_pass = input(f"Password ({remaining_attempts} attempt(s) left): ")
         print()
         if users[check_user] == check_pass:
             print("Login successful!")
             input("Press Enter to proceed to main menu...")
             return False
         # if it is not at the last attempt
-        if attempts != 3:
+        if remaining_attempts != 1:
             print("Wrong password! Please try again.")
-        attempts += 1
+        remaining_attempts -= 1
     print("Wrong password!")
     print("Program ended.")
     return True
