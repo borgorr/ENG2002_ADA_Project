@@ -65,7 +65,7 @@ def valid(numerator, denominator):
 def frac_power_division():
     # ask the user for the 1st and 2nd fraction
     for i in range(2):
-        print(f"Enter the numerator (a), denominator (b), numerator of exponent (c), denominator of exponent (d) of your {["1st", "2nd"][i]} fraction (a / b) ^ (c / d).")
+        print(f"Enter the numerator (a), denominator (b), numerator of exponent (c), denominator of exponent (d) of your {['1st', '2nd'][i]} fraction (a / b) ^ (c / d).")
         print("a, b, c, d must be non-zero integers.")
         print("Format: a, b, c, d")
         # turn the 4 inputs into 4 integers

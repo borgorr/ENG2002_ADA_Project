@@ -43,7 +43,7 @@ def valid(numerator, denominator):
 def int_power_division():
     # ask the user for the 1st and 2nd fraction
     for i in range(2):
-        print(f"Enter the numerator (a), denominator (b), exponent (n) of your {["1st", "2nd"][i]} fraction (a / b) ^ (n).")
+        print(f"Enter the numerator (a), denominator (b), exponent (n) of your {['1st', '2nd'][i]} fraction (a / b) ^ (n).")
         print("a, b must be non-zero integers.")
         print("n must be an integer.")
         print("Format: a, b, n")

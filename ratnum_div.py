@@ -27,7 +27,7 @@ def valid(deno):
 def frac_division():
     # ask the user for the 1st and 2nd fraction
     for i in range(2):
-        print(f"Enter the numerator (a), denominator (b) of your {["1st", "2nd"][i]} fraction (a / b)")
+        print(f"Enter the numerator (a), denominator (b) of your {['1st', '2nd'][i]} fraction (a / b)")
         print("a must be an integer.")
         print("b must be a non-zero integer.")
         print("Format: a, b")
