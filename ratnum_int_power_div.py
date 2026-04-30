@@ -33,7 +33,7 @@ class ratNum:
 # invalid if fraction is 0 or base is 0
 def valid(numerator, denominator):
     if numerator == 0:
-        print("ERROR! Numerator must a non-zero integer.")
+        print("ERROR! Numerator must be a non-zero integer.")
         return False
     if denominator <= 0:
         print("ERROR! Denominator must be a positive integer.")

@@ -12,7 +12,7 @@ class ratNum:
         return f"({self.a}/{self.b}) ^ ({self.n_numer}/{self.n_deno})"
     
     def no_principle_value(self):
-        return (self.a / self.b) < 0 and self.n_deno % 2 == 0
+        return (self.a ** self.n_numer / self.b ** self.n_numer) < 0 and self.n_deno % 2 == 0
     
     # apply an integer exponent to a fraction (a / b) ^ (c / d) = (a ^ c / b ^ c) ^ (1 / d)
     def remove_expo_numer(self):
